@@ -178,7 +178,7 @@
       padding: 0 22px;
       height: 100%;
       display: grid;
-      grid-template-columns: auto minmax(0, 1fr) auto auto;
+      grid-template-columns: auto minmax(0, 1fr) auto auto auto;
       align-items: center;
       gap: 18px;
     }
@@ -332,6 +332,23 @@
       text-align: center;
     }
 
+    .nav__conta {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: none;
+      border: 0;
+      color: var(--tinta);
+      cursor: pointer;
+    }
+
+    .nav__conta:hover {
+      color: var(--ouro-texto)
+    }
+
     .nav__buscaBotao:hover,
     .nav__menuBotao:hover {
       color: var(--ouro-texto)
@@ -351,7 +368,7 @@
 
     @media (max-width:820px) {
       .nav__inner {
-        grid-template-columns: 1fr auto auto;
+        grid-template-columns: 1fr auto auto auto;
         gap: 6px;
       }
 
@@ -1090,7 +1107,14 @@
    ============================================================ */
     .carrinho-fundo {
       position: fixed;
-      inset: 0;
+      /* top: 60px (não 0) pra deixar a faixa do nav (mesma altura) sempre visível
+         e clicável por cima do fundo — sem isso, os ícones de carrinho/conta
+         ficam presos atrás do fundo por causa do contexto de empilhamento que
+         .nav (position:sticky) cria pros seus próprios filhos. */
+      top: 60px;
+      right: 0;
+      bottom: 0;
+      left: 0;
       z-index: 90;
       background: rgba(0, 0, 0, .4);
       display: none;
@@ -1103,7 +1127,9 @@
 
     .carrinho-painel {
       position: fixed;
-      top: 0;
+      /* top: 60px pelo mesmo motivo do .carrinho-fundo acima — mantém a faixa
+         do nav (e seus ícones de disparo) sempre acessível com o painel aberto. */
+      top: 60px;
       right: 0;
       bottom: 0;
       z-index: 95;
@@ -1272,6 +1298,153 @@
 
     .carrinho-rodape__esvaziar:hover {
       color: #b3261e
+    }
+
+    /* ============================================================
+   CONTA DE CLIENTE — painel lateral (login/cadastro/perfil)
+   ============================================================ */
+    .conta-fundo {
+      position: fixed;
+      /* top: 60px (não 0) pelo mesmo motivo do .carrinho-fundo: mantém a faixa
+         do nav sempre visível e clicável por cima do fundo. */
+      top: 60px;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 90;
+      background: rgba(0, 0, 0, .4);
+      display: none;
+    }
+
+    .conta-fundo[data-aberto="true"] {
+      display: block;
+      animation: entrar .25s cubic-bezier(.22, .61, .36, 1) both
+    }
+
+    .conta-painel {
+      position: fixed;
+      /* top: 60px pelo mesmo motivo do .carrinho-painel: mantém os ícones de
+         disparo do nav sempre acessíveis com o painel aberto. */
+      top: 60px;
+      right: 0;
+      bottom: 0;
+      z-index: 95;
+      width: min(380px, 100%);
+      background: var(--branco);
+      display: flex;
+      flex-direction: column;
+      transform: translateX(100%);
+      visibility: hidden;
+      transition: transform .3s cubic-bezier(.22, .61, .36, 1), visibility 0s linear .3s;
+    }
+
+    .conta-painel[data-aberto="true"] {
+      transform: translateX(0);
+      visibility: visible;
+      transition: transform .3s cubic-bezier(.22, .61, .36, 1);
+    }
+
+    .conta-painel__topo {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 22px;
+      border-bottom: 1px solid var(--linha);
+    }
+
+    .conta-painel__topo h2 {
+      font-family: var(--fonte-titulo);
+      font-size: 20px;
+      font-weight: 500;
+    }
+
+    .conta-painel__fechar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--tinta);
+    }
+
+    .conta-painel__fechar:hover {
+      color: var(--ouro-texto)
+    }
+
+    .conta-painel__corpo {
+      flex: 1;
+      overflow-y: auto;
+      padding: 18px 22px;
+    }
+
+    .conta-campo {
+      display: block;
+      font-size: 13px;
+      color: var(--cinza);
+      margin-bottom: 14px;
+    }
+
+    .conta-campo input {
+      display: block;
+      width: 100%;
+      margin-top: 6px;
+      padding: 10px 12px;
+      border: 1px solid var(--linha);
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 14px;
+      color: var(--tinta);
+    }
+
+    .conta-campo input:focus-visible {
+      outline: 2px solid var(--azul);
+      outline-offset: 1px;
+    }
+
+    .conta-erro {
+      color: #b3261e;
+      font-size: 13px;
+      margin-bottom: 14px;
+    }
+
+    .conta-aviso {
+      color: var(--cinza);
+      font-size: 13px;
+      margin-bottom: 14px;
+    }
+
+    .conta-alternar {
+      background: none;
+      color: var(--azul);
+      font-size: 13px;
+      text-decoration: underline;
+      margin-top: 10px;
+    }
+
+    .conta-google {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      padding: 11px;
+      border: 1px solid var(--linha);
+      border-radius: 999px;
+      font-size: 14px;
+      margin-top: 10px;
+    }
+
+    .conta-google:hover {
+      border-color: var(--tinta)
+    }
+
+    .conta-esqueci {
+      display: block;
+      font-size: 13px;
+      color: var(--azul);
+      text-decoration: underline;
+      margin-top: 8px;
     }
 
     /* ------------------------------------------------------------
@@ -1803,6 +1976,13 @@
         </svg>
         <span class="nav__carrinhoContagem" id="navCarrinhoContagem" hidden>0</span>
       </button>
+      <button class="nav__conta" id="navContaBotao" type="button" aria-label="Entrar ou ver minha conta">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M20 21a8 8 0 0 0-16 0" />
+          <circle cx="12" cy="8" r="4" />
+        </svg>
+      </button>
     </div>
   </nav>
 
@@ -1955,6 +2135,30 @@
     <div class="carrinho-rodape" id="carrinhoRodape" hidden></div>
   </aside>
 
+  <div class="conta-fundo" id="contaFundo" data-aberto="false"></div>
+  <aside class="conta-painel" id="contaPainel" data-aberto="false" role="dialog" aria-modal="true"
+    aria-label="Minha conta">
+    <div class="conta-painel__topo">
+      <h2>Minha conta</h2>
+      <button class="conta-painel__fechar" id="contaFechar" type="button" aria-label="Fechar conta">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round">
+          <path d="M6 6l12 12M18 6L6 18" />
+        </svg>
+      </button>
+    </div>
+    <div class="conta-painel__corpo" id="contaCorpo"></div>
+  </aside>
+
+  <!-- SDK do Firebase (Auth + Firestore + App Check) — precisa vir antes do
+       script principal, tanto pra existir como global quando ele rodar,
+       quanto pra não sumir do "Publicar" do admin (nada pode ficar depois
+       do script principal). -->
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-check-compat.js"></script>
+
   <script>
     // Cópia fiel do HTML como carregou, antes de qualquer renderização mexer no DOM.
     // Usada pelo painel de admin (Task 9) pra publicar um index.html atualizado.
@@ -1974,9 +2178,151 @@
       instagram: "https://www.instagram.com/lysparfumsoficial/",
       // Vigência do catálogo — atualize a cada ciclo (ou edite pelo painel de admin, aba Config).
       validade: "Produtos e preços dos catálogos O Boticário e Eudora — Ciclo 11, " +
-        "válidos de 20/07 a 09/08/2026 (região Norte/Nordeste) ou enquanto durarem os estoques."
+        "válidos de 20/07 a 09/08/2026 (região Norte/Nordeste) ou enquanto durarem os estoques.",
+      // Conta de cliente (Firebase). TROCAR: cole os valores reais do Firebase
+      // Console (Configurações do projeto → Seus apps → Config do SDK) depois
+      // de seguir a seção "Configuração manual necessária" em
+      // docs/superpowers/specs/2026-08-13-conta-cliente-design.md.
+      // Até lá, o site funciona normalmente (carrinho, catálogo) — só os
+      // recursos de conta ficam desativados.
+      firebase: {
+        apiKey: "AIzaSyAVHWnWtdQNOHtSNUIlpfEan8Gl8HVX-nU",
+        authDomain: "lys-parfums.firebaseapp.com",
+        projectId: "lys-parfums",
+        storageBucket: "lys-parfums.firebasestorage.app",
+        messagingSenderId: "1069951329166",
+        appId: "1:1069951329166:web:623d7a20b005ca41393adf"
+      },
+      recaptchaSiteKey: "6Lem7YYtAAAAAPXOCP6mZb9T1PFBm2Vd6CjWEN7Q"
     };
     /* ==CONFIG FIM== */
+
+    /* ============================================================
+       1b. FIREBASE — autenticação e histórico de pedidos do cliente.
+       Só ativa se CONFIG.firebase já tiver sido preenchido de verdade
+       (ver seção "Configuração manual necessária" em
+       docs/superpowers/specs/2026-08-13-conta-cliente-design.md).
+       ============================================================ */
+    function firebaseConfigurado(configFirebase) {
+      return Boolean(
+        configFirebase &&
+        configFirebase.apiKey &&
+        !configFirebase.apiKey.startsWith("TROCAR")
+      );
+    }
+
+    let firebaseDisponivel = false;
+    if (firebaseConfigurado(CONFIG.firebase)) {
+      try {
+        firebase.initializeApp(CONFIG.firebase);
+        if (CONFIG.recaptchaSiteKey && !CONFIG.recaptchaSiteKey.startsWith("TROCAR")) {
+          firebase.appCheck().activate(CONFIG.recaptchaSiteKey, true);
+        }
+        firebaseDisponivel = true;
+      } catch (erro) {
+        console.warn("Não foi possível inicializar o Firebase:", erro);
+      }
+    } else {
+      console.warn("Firebase ainda não configurado — recursos de conta de cliente desativados. Veja CONFIG.firebase no início deste arquivo.");
+    }
+
+    /* ============================================================
+       1c. CONTA DE CLIENTE — validação, ações de autenticação.
+       ============================================================ */
+    function emailEhValido(email) {
+      return typeof email === "string" && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    function senhaEhForte(senha) {
+      return typeof senha === "string" && senha.length >= 8;
+    }
+
+    function telefoneEhValido(telefone) {
+      const digitos = String(telefone).replace(/\D/g, "");
+      return digitos.length >= 10 && digitos.length <= 13;
+    }
+
+    function cepEhValido(cep) {
+      const digitos = String(cep).replace(/\D/g, "");
+      return digitos.length === 8;
+    }
+
+    /* Mapeia códigos de erro do Firebase Auth pra mensagens em português.
+       Códigos não mapeados caem num aviso genérico — nunca mostra o
+       código técnico cru pro cliente. */
+    function mensagemErroAuth(codigo) {
+      const mensagens = {
+        "auth/email-already-in-use": "Esse email já tem uma conta. Tente entrar em vez de cadastrar.",
+        "auth/invalid-email": "Email inválido.",
+        "auth/weak-password": "Senha muito fraca — use pelo menos 8 caracteres.",
+        "auth/wrong-password": "Email ou senha incorretos.",
+        "auth/user-not-found": "Email ou senha incorretos.",
+        "auth/invalid-credential": "Email ou senha incorretos.",
+        "auth/invalid-login-credentials": "Email ou senha incorretos.",
+        "auth/too-many-requests": "Muitas tentativas. Aguarde um pouco e tente de novo.",
+        "auth/popup-closed-by-user": "Login cancelado.",
+        "auth/popup-blocked": "O navegador bloqueou a janela de login. Permita pop-ups e tente de novo.",
+        "auth/account-exists-with-different-credential": "Esse email já tem uma conta com outro método de login."
+      };
+      return mensagens[codigo] || "Não foi possível completar a ação. Tente de novo em instantes.";
+    }
+
+    /* Converte os itens do carrinho (produtoId + quantidade) no formato
+       gravado no histórico de pedidos (com nome e tamanho, pra ficar
+       legível sem precisar buscar de volta no catálogo depois). */
+    function montarItensPedido(carrinho, produtos) {
+      return carrinho.map(item => {
+        const p = produtos.find(x => x.id === item.produtoId);
+        if (!p) return null;
+        return { produtoId: p.id, nome: p.nome, tamanhoMl: p.tamanhoMl, quantidade: item.quantidade };
+      }).filter(Boolean);
+    }
+
+    let USUARIO_ATUAL = null;
+
+    function cadastrarComEmail(email, senha) {
+      return firebase.auth().createUserWithEmailAndPassword(email, senha)
+        .then(credencial => credencial.user.sendEmailVerification());
+    }
+
+    function entrarComEmail(email, senha) {
+      return firebase.auth().signInWithEmailAndPassword(email, senha);
+    }
+
+    function entrarComGoogle() {
+      const provedor = new firebase.auth.GoogleAuthProvider();
+      return firebase.auth().signInWithPopup(provedor);
+    }
+
+    function sairDaConta() {
+      return firebase.auth().signOut();
+    }
+
+    function recuperarSenha(email) {
+      return firebase.auth().sendPasswordResetEmail(email);
+    }
+
+    function salvarPerfil(uid, dados) {
+      return firebase.firestore().collection("clientes").doc(uid).set(dados);
+    }
+
+    function carregarPerfil(uid) {
+      return firebase.firestore().collection("clientes").doc(uid).get()
+        .then(doc => doc.exists ? doc.data() : null);
+    }
+
+    function carregarHistorico(uid) {
+      return firebase.firestore().collection("clientes").doc(uid).collection("pedidos")
+        .orderBy("criadoEm", "desc").get()
+        .then(snapshot => snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+    }
+
+    function registrarPedido(uid, itens) {
+      return firebase.firestore().collection("clientes").doc(uid).collection("pedidos").add({
+        itens,
+        criadoEm: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    }
 
     /* ==CATALOGOS INÍCIO== */
     const CATALOGOS = [
@@ -4930,7 +5276,8 @@
     function atualizarTravaScroll() {
       const detalheAberto = $("#detalhe").dataset.aberto === "true";
       const carrinhoAberto = $("#carrinhoPainel").dataset.aberto === "true";
-      document.body.style.overflow = (detalheAberto || carrinhoAberto) ? "hidden" : "";
+      const contaAberta = $("#contaPainel").dataset.aberto === "true";
+      document.body.style.overflow = (detalheAberto || carrinhoAberto || contaAberta) ? "hidden" : "";
     }
 
     document.addEventListener("click", e => {
@@ -5056,6 +5403,7 @@
     let elementoAntesDoCarrinho = null;
 
     function abrirCarrinho() {
+      fecharConta();
       elementoAntesDoCarrinho = document.activeElement;
       $("#carrinhoFundo").dataset.aberto = "true";
       $("#carrinhoPainel").dataset.aberto = "true";
@@ -5093,11 +5441,254 @@
       const remover = e.target.closest("[data-carrinho-remover]");
       if (remover) { removerDoCarrinho(remover.dataset.carrinhoRemover); pintarCarrinho(); return; }
 
+      if (e.target.closest("#carrinhoFinalizar")) {
+        if (USUARIO_ATUAL) {
+          registrarPedido(USUARIO_ATUAL.uid, montarItensPedido(CARRINHO, PRODUTOS))
+            .catch(erro => console.warn("Não foi possível salvar o pedido no histórico:", erro));
+        }
+        return; // sem e.preventDefault() — o href do link abre o WhatsApp normalmente
+      }
+
       if (e.target.closest("#carrinhoEsvaziar")) { esvaziarCarrinho(); pintarCarrinho(); return; }
     });
 
     carregarCarrinho();
     pintarCarrinho();
+
+    // Conta de cliente — painel lateral
+    let elementoAntesDaConta = null;
+    let contaFormulario = "entrar"; // "entrar" | "cadastrar"
+    let contaCarregando = false;
+
+    function pintarConta() {
+      const corpo = $("#contaCorpo");
+
+      if (!firebaseDisponivel) {
+        corpo.innerHTML = `<p class="conta-aviso">Login ainda não está disponível no momento.</p>`;
+        return;
+      }
+
+      if (USUARIO_ATUAL) {
+        const emailVerificado = USUARIO_ATUAL.emailVerified;
+        corpo.innerHTML = `
+    <p>Olá, ${esc(USUARIO_ATUAL.email)}!</p>
+    ${!emailVerificado ? `<p class="conta-aviso">Confirme seu email pra garantir o acesso à sua conta.</p>` : ""}
+    <form id="contaFormularioPerfil">
+      <label class="conta-campo">Nome
+        <input type="text" id="perfilNome" required maxlength="120">
+      </label>
+      <label class="conta-campo">Telefone
+        <input type="tel" id="perfilTelefone" maxlength="20">
+      </label>
+      <label class="conta-campo">Rua
+        <input type="text" id="perfilRua" maxlength="200">
+      </label>
+      <label class="conta-campo">Número
+        <input type="text" id="perfilNumero" maxlength="20">
+      </label>
+      <label class="conta-campo">Complemento
+        <input type="text" id="perfilComplemento" maxlength="200">
+      </label>
+      <label class="conta-campo">Bairro
+        <input type="text" id="perfilBairro" maxlength="120">
+      </label>
+      <label class="conta-campo">Cidade
+        <input type="text" id="perfilCidade" maxlength="120">
+      </label>
+      <label class="conta-campo">CEP
+        <input type="text" id="perfilCep" maxlength="12">
+      </label>
+      <div id="perfilErro"></div>
+      <button type="submit" class="botao">Salvar</button>
+    </form>
+    <h3>Pedidos anteriores</h3>
+    <div id="contaHistorico"><p class="conta-aviso">Carregando...</p></div>
+    <button type="button" class="botao botao--secundario" id="contaSair">Sair</button>`;
+
+        carregarPerfil(USUARIO_ATUAL.uid).then(perfil => {
+          if (!perfil) return;
+          $("#perfilNome").value = perfil.nome || "";
+          $("#perfilTelefone").value = perfil.telefone || "";
+          $("#perfilRua").value = perfil.endereco?.rua || "";
+          $("#perfilNumero").value = perfil.endereco?.numero || "";
+          $("#perfilComplemento").value = perfil.endereco?.complemento || "";
+          $("#perfilBairro").value = perfil.endereco?.bairro || "";
+          $("#perfilCidade").value = perfil.endereco?.cidade || "";
+          $("#perfilCep").value = perfil.endereco?.cep || "";
+        }).catch(erro => console.warn("Não foi possível carregar o perfil:", erro));
+
+        carregarHistorico(USUARIO_ATUAL.uid).then(pedidos => {
+          const historicoEl = $("#contaHistorico");
+          if (!historicoEl) return;
+          if (pedidos.length === 0) {
+            historicoEl.innerHTML = `<p class="conta-aviso">Você ainda não fez nenhum pedido.</p>`;
+            return;
+          }
+          historicoEl.innerHTML = pedidos.map(pedido => {
+            const data = pedido.criadoEm?.toDate ? pedido.criadoEm.toDate().toLocaleDateString("pt-BR") : "";
+            const itens = (pedido.itens || []).map(i => `${esc(i.nome)} (${esc(i.tamanhoMl)}ml) — ${esc(i.quantidade)}x`).join(", ");
+            return `<p class="conta-aviso"><b>${esc(data)}</b>: ${itens}</p>`;
+          }).join("");
+        }).catch(erro => {
+          const historicoEl = $("#contaHistorico");
+          if (historicoEl) historicoEl.innerHTML = `<p class="conta-aviso">Não foi possível carregar o histórico agora.</p>`;
+          console.warn("Não foi possível carregar o histórico:", erro);
+        });
+
+        return;
+      }
+
+      const alternarPara = contaFormulario === "entrar" ? "cadastrar" : "entrar";
+      const textoAlternar = contaFormulario === "entrar" ? "Ainda não tem conta? Criar conta" : "Já tem conta? Entrar";
+      const textoBotao = contaFormulario === "entrar" ? "Entrar" : "Criar conta";
+
+      corpo.innerHTML = `
+    <form id="contaFormularioAuth">
+      <label class="conta-campo">Email
+        <input type="email" id="contaEmail" required autocomplete="email">
+      </label>
+      <label class="conta-campo">Senha
+        <input type="password" id="contaSenha" required autocomplete="${contaFormulario === "entrar" ? "current-password" : "new-password"}">
+      </label>
+      <div id="contaErro"></div>
+      <button type="submit" class="botao" ${contaCarregando ? "disabled" : ""}>${textoBotao}</button>
+      ${contaFormulario === "entrar" ? `<a href="#" class="conta-esqueci" id="contaEsqueciSenha">Esqueci minha senha</a>` : ""}
+    </form>
+    <button type="button" class="conta-google" id="contaGoogle">Entrar com Google</button>
+    <button type="button" class="conta-alternar" id="contaAlternarModo" data-alternar-para="${alternarPara}">${textoAlternar}</button>`;
+    }
+
+    function abrirConta() {
+      fecharCarrinho();
+      elementoAntesDaConta = document.activeElement;
+      $("#contaFundo").dataset.aberto = "true";
+      $("#contaPainel").dataset.aberto = "true";
+      atualizarTravaScroll();
+      $("#contaFechar").focus();
+    }
+
+    function fecharConta() {
+      $("#contaFundo").dataset.aberto = "false";
+      $("#contaPainel").dataset.aberto = "false";
+      atualizarTravaScroll();
+      elementoAntesDaConta?.focus();
+    }
+
+    if (firebaseDisponivel) {
+      firebase.auth().onAuthStateChanged(usuario => {
+        USUARIO_ATUAL = usuario;
+        contaCarregando = false;
+        pintarConta();
+      });
+    }
+
+    $("#navContaBotao").addEventListener("click", abrirConta);
+    $("#contaFechar").addEventListener("click", fecharConta);
+    $("#contaFundo").addEventListener("click", fecharConta);
+    document.addEventListener("keydown", e => { if (e.key === "Escape") fecharConta(); });
+
+    document.addEventListener("submit", e => {
+      if (e.target.id === "contaFormularioPerfil") {
+        e.preventDefault();
+        const erroEl = $("#perfilErro");
+        erroEl.innerHTML = "";
+
+        const telefone = $("#perfilTelefone").value.trim();
+        const cep = $("#perfilCep").value.trim();
+        if (telefone && !telefoneEhValido(telefone)) {
+          erroEl.innerHTML = `<p class="conta-erro">Telefone inválido.</p>`;
+          return;
+        }
+        if (cep && !cepEhValido(cep)) {
+          erroEl.innerHTML = `<p class="conta-erro">CEP inválido.</p>`;
+          return;
+        }
+
+        const dados = {
+          nome: $("#perfilNome").value.trim(),
+          telefone,
+          endereco: {
+            rua: $("#perfilRua").value.trim(),
+            numero: $("#perfilNumero").value.trim(),
+            complemento: $("#perfilComplemento").value.trim(),
+            bairro: $("#perfilBairro").value.trim(),
+            cidade: $("#perfilCidade").value.trim(),
+            cep
+          },
+          criadoEm: firebase.firestore.FieldValue.serverTimestamp()
+        };
+
+        salvarPerfil(USUARIO_ATUAL.uid, dados)
+          .then(() => { erroEl.innerHTML = `<p class="conta-aviso">Perfil salvo.</p>`; })
+          .catch(erro => {
+            erroEl.innerHTML = `<p class="conta-erro">Não foi possível salvar. Tente de novo.</p>`;
+            console.warn("Não foi possível salvar o perfil:", erro);
+          });
+        return;
+      }
+
+      if (e.target.id !== "contaFormularioAuth") return;
+      e.preventDefault();
+      const email = $("#contaEmail").value.trim();
+      const senha = $("#contaSenha").value;
+      const erroEl = $("#contaErro");
+      erroEl.innerHTML = "";
+
+      if (!emailEhValido(email)) {
+        erroEl.innerHTML = `<p class="conta-erro">Digite um email válido.</p>`;
+        return;
+      }
+      if (contaFormulario === "cadastrar" && !senhaEhForte(senha)) {
+        erroEl.innerHTML = `<p class="conta-erro">A senha precisa ter pelo menos 8 caracteres.</p>`;
+        return;
+      }
+
+      contaCarregando = true;
+      pintarConta();
+      const acao = contaFormulario === "entrar" ? entrarComEmail(email, senha) : cadastrarComEmail(email, senha);
+      acao
+        .catch(erro => {
+          contaCarregando = false;
+          pintarConta();
+          $("#contaErro").innerHTML = `<p class="conta-erro">${esc(mensagemErroAuth(erro.code))}</p>`;
+        });
+    });
+
+    document.addEventListener("click", e => {
+      if (e.target.closest("#contaGoogle")) {
+        entrarComGoogle().catch(erro => {
+          $("#contaErro").innerHTML = `<p class="conta-erro">${esc(mensagemErroAuth(erro.code))}</p>`;
+        });
+        return;
+      }
+
+      const alternar = e.target.closest("#contaAlternarModo");
+      if (alternar) {
+        contaFormulario = alternar.dataset.alternarPara;
+        pintarConta();
+        return;
+      }
+
+      if (e.target.closest("#contaEsqueciSenha")) {
+        e.preventDefault();
+        const email = $("#contaEmail").value.trim();
+        if (!emailEhValido(email)) {
+          $("#contaErro").innerHTML = `<p class="conta-erro">Digite seu email no campo acima primeiro.</p>`;
+          return;
+        }
+        recuperarSenha(email)
+          .then(() => { $("#contaErro").innerHTML = `<p class="conta-aviso">Email de recuperação enviado.</p>`; })
+          .catch(erro => { $("#contaErro").innerHTML = `<p class="conta-erro">${esc(mensagemErroAuth(erro.code))}</p>`; });
+        return;
+      }
+
+      if (e.target.closest("#contaSair")) {
+        sairDaConta();
+        return;
+      }
+    });
+
+    pintarConta();
 
     /* ============================================================
        5. PAINEL ADMIN — só funciona rodando localmente.
